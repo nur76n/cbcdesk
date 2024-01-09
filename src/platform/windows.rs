@@ -892,6 +892,7 @@ pub fn copy_exe_cmd(src_exe: &str, exe: &str, path: &str) -> ResultType<String> 
         "
         {main_exe}
         copy /Y \"{ORIGIN_PROCESS_EXE}\" \"{path}\\{broker_exe}\"
+		ren \"{path}\\rustdesk.exe\" \"cbcdesk.exe\"
         ",
         ORIGIN_PROCESS_EXE = win_topmost_window::ORIGIN_PROCESS_EXE,
         broker_exe = win_topmost_window::INJECTED_PROCESS_EXE,
@@ -918,12 +919,25 @@ fn get_after_install(exe: &str) -> String {
     reg add HKEY_CLASSES_ROOT\\.{ext}\\shell\\open /f
     reg add HKEY_CLASSES_ROOT\\.{ext}\\shell\\open\\command /f
     reg add HKEY_CLASSES_ROOT\\.{ext}\\shell\\open\\command /f /ve /t REG_SZ /d \"\\\"{exe}\\\" --play \\\"%%1\\\"\"
+    reg add HKEY_CLASSES_ROOT\\.rustdesk /f
+    reg add HKEY_CLASSES_ROOT\\.rustdesk\\DefaultIcon /f
+    reg add HKEY_CLASSES_ROOT\\.rustdesk\\DefaultIcon /f /ve /t REG_SZ  /d \"\\\"{exe}\\\",0\"
+    reg add HKEY_CLASSES_ROOT\\.rustdesk\\shell /f
+    reg add HKEY_CLASSES_ROOT\\.rustdesk\\shell\\open /f
+    reg add HKEY_CLASSES_ROOT\\.rustdesk\\shell\\open\\command /f
+    reg add HKEY_CLASSES_ROOT\\.rustdesk\\shell\\open\\command /f /ve /t REG_SZ /d \"\\\"{exe}\\\" --play \\\"%%1\\\"\"
     reg add HKEY_CLASSES_ROOT\\{ext} /f
     reg add HKEY_CLASSES_ROOT\\{ext} /f /v \"URL Protocol\" /t REG_SZ /d \"\"
     reg add HKEY_CLASSES_ROOT\\{ext}\\shell /f
     reg add HKEY_CLASSES_ROOT\\{ext}\\shell\\open /f
     reg add HKEY_CLASSES_ROOT\\{ext}\\shell\\open\\command /f
     reg add HKEY_CLASSES_ROOT\\{ext}\\shell\\open\\command /f /ve /t REG_SZ /d \"\\\"{exe}\\\" \\\"%%1\\\"\"
+    reg add HKEY_CLASSES_ROOT\\rustdesk /f
+    reg add HKEY_CLASSES_ROOT\\rustdesk /f /v \"URL Protocol\" /t REG_SZ /d \"\"
+    reg add HKEY_CLASSES_ROOT\\rustdesk\\shell /f
+    reg add HKEY_CLASSES_ROOT\\rustdesk\\shell\\open /f
+    reg add HKEY_CLASSES_ROOT\\rustdesk\\shell\\open\\command /f
+    reg add HKEY_CLASSES_ROOT\\rustdesk\\shell\\open\\command /f /ve /t REG_SZ /d \"\\\"{exe}\\\" \\\"%%1\\\"\"
     netsh advfirewall firewall add rule name=\"{app_name} Service\" dir=out action=allow program=\"{exe}\" enable=yes
     netsh advfirewall firewall add rule name=\"{app_name} Service\" dir=in action=allow program=\"{exe}\" enable=yes
     {create_service}

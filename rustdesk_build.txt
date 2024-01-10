@@ -1,0 +1,47 @@
+python3 .\build.py --portable --hwcodec --flutter --gpucodec --feature IddDriver
+
+
+visual studio 2022 community
+install C++ env
+
+
+
+
+
+
+# one time commands 
+
+git clone https://github.com/microsoft/vcpkg
+cd vcpkg
+git checkout 2023.10.19
+cd ..
+vcpkg/bootstrap-vcpkg.bat
+$env:VCPKG_ROOT = "$PWD/vcpkg"
+vcpkg/vcpkg install libvpx:x64-windows-static libyuv:x64-windows-static opus:x64-windows-static aom:x64-windows-static
+# vcpkg install --triplet x64-windows-static --x-install-root="$VCPKG_ROOT/installed"
+
+#  FLUTTER_VERSION: "3.13.9"
+# FLUTTER_RUST_BRIDGE_VERSION: "1.80.1"
+
+# flutter
+flutter doctor -v
+flutter precache --windows
+Invoke-WebRequest -Uri https://github.com/fufesou/flutter-engine/releases/download/bugfix-crash-windows-angle-context-frameBuffer/windows-x64-release.zip -OutFile windows-x64-flutter-release.zip
+Expand-Archive windows-x64-flutter-release.zip -DestinationPath .
+mv -Force windows-x64-release/*  C:/distr/flutter/bin/cache/artifacts/engine/windows-x64-release/
+
+# Install flutter rust bridge deps
+cargo install flutter_rust_bridge_codegen --version 1.80.1 --features "uuid"
+Push-Location flutter ; flutter pub get ; Pop-Location
+~/.cargo/bin/flutter_rust_bridge_codegen --rust-input ./src/flutter_ffi.rs --dart-output ./flutter/lib/generated_bridge.dart
+
+
+# Enable developer mode
+start ms-settings:developers
+
+
+$env:RENDEZVOUS_SERVER = 'cbcdesk.cbcn.kz'
+$env:RS_PUB_KEY = 'Y9LIeX+g6kIEdPcObfolXuVc1IkXXqSOCut7bblLxHQ='
+
+Remove-Item .\flutter\build -Recurse -Force ; Remove-Item .\target -Recurse -Force ; python3 .\build.py --portable --hwcodec --flutter
+ --gpucodec --feature IddDriver

@@ -834,7 +834,7 @@ dependencies = [
 
 [[package]]
 name = "cbcdesk"
-version = "1.0.2"
+version = "1.0.4"
 dependencies = [
  "android-wakelock",
  "android_logger",

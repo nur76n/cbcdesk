@@ -40,8 +40,13 @@ Push-Location flutter ; flutter pub get ; Pop-Location
 start ms-settings:developers
 
 
+
 $env:RENDEZVOUS_SERVER = 'cbcdesk.cbcn.kz'
 $env:RS_PUB_KEY = 'Y9LIeX+g6kIEdPcObfolXuVc1IkXXqSOCut7bblLxHQ='
 
-Remove-Item .\flutter\build -Recurse -Force ; Remove-Item .\target -Recurse -Force ; python3 .\build.py --portable --hwcodec --flutter
- --gpucodec --feature IddDriver
+$env:VCPKG_ROOT = 'C:\distr\vcpkg'
+$env:LIBCLANG_PATH = 'C:\Program Files\LLVM\bin'
+
+Remove-Item .\flutter\build\* -Recurse -Force ; 
+Remove-Item .\target\* -Recurse -Force ; 
+python3 .\build.py --portable --hwcodec --flutter --gpucodec --feature IddDriver
